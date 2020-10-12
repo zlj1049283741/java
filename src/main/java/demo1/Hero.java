@@ -6,15 +6,16 @@ public class Hero {
 	float armor;// 护甲
 	int moveSpeed;// 移动速度
 	int killNum = 0;// 击杀数
+	int continuity_kill = 0;// 连续击杀
 	int deathNum = 0;// 死亡数
 	int assistsNum = 0;// 助攻数
 	static int pi = 100;
 
-	//构造函数
+	// 构造函数
 	public Hero() {
 	}
 
-	//构造函数
+	// 构造函数
 	public Hero(String name, float hp, float armor, int moveSpeed) {
 		super();
 		this.name = name;
@@ -78,50 +79,53 @@ public class Hero {
 	public void setAssistsNum(int assists) {
 		this.assistsNum = assists;
 	}
-	
-	//击杀函数，击杀数+1
-	public int kill(Hero hero) {
+
+	// 击杀函数，击杀数+1
+	public void kill(Hero hero) {
 		hero.hp = 0;
 		System.out.println(this.name + "击杀了" + hero.name);
-		this.legendary();
 		this.killSay();
 		hero.deathSay();
-		return this.killNum += 1;
+		this.killNum += 1;
+		this.continuity_kill += 1;
+		this.legendary();
 	}
 
-	//击杀对手时喊话
+	// 击杀对手时喊话
 	public void killSay() {
-		System.out.println(this.name+"才是胜利者！");
+		System.out.println(this.name + "才是胜利者！");
 	}
 
-	//助攻，助攻数+1
-	public int assists(Hero teammate,Hero enemy) {
+	// 助攻，助攻数+1
+	public int assists(Hero teammate, Hero enemy) {
 		teammate.kill(enemy);
-		System.out.println(this.name +"协助"+teammate.name+"击杀了"+enemy.name);
+		System.out.println(this.name + "协助" + teammate.name + "击杀了" + enemy.name);
 		return this.assistsNum++;
 	}
-	
-	//死亡，死亡数+1
-	public int death() {
+
+	// 死亡，死亡数+1
+	public void death() {
 		if (this.hp == 0) {
 			this.deathNum += 1;
 		}
-		return this.deathNum;
+		this.continuity_kill = 0;
 	}
 
-	//死亡喊话
+	// 死亡喊话
 	public void deathSay() {
 		System.out.println(this.name + "一定会再回来的！");
 	}
-	
-	//超神
+
+	// 超神
 	public void legendary() {
-		if (this.killNum >= 8) {
-			System.out.println(this.name+"已经超神了！");
+		if (this.continuity_kill >= 8) {
+			System.out.println(this.name + "已经超神了！");
 		}
 	}
-	
+
+	// 回血
 	public float recovery(float blood) {
+		System.out.println(this.name + "回复了" + blood + "点血量");
 		return this.hp += blood;
 	}
 
@@ -134,9 +138,8 @@ public class Hero {
 		System.out.println(gailun.killNum);
 		gailun.assists(guanghui, timo);
 		for (int i = 1; i < 9; i++) {
-			System.out.println("***********"+i+"***********");
 			gailun.kill(timo);
 		}
-		
+		timo.recovery(200);
 	}
 }
